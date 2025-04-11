@@ -1,0 +1,26 @@
+import { PollingBlockTracker } from '@metamask/eth-block-tracker';
+import { providerFromEngine } from '@metamask/eth-json-rpc-provider';
+import type { SafeEventEmitterProvider } from '@metamask/eth-json-rpc-provider';
+import type { JsonRpcMiddleware } from '@metamask/json-rpc-engine';
+import { JsonRpcEngine } from '@metamask/json-rpc-engine';
+
+import { createBlockRefMiddleware } from '.';
+import {
+  buildMockParamsWithBlockParamAt,
+  stubProviderRequests,
+  buildStubForBlockNumberRequest,
+  buildStubForGenericRequest,
+  buildFinalMiddlewareWithDefaultResult,
+  buildMockParamsWithoutBlockParamAt,
+  expectProviderRequestNotToHaveBeenMade,
+} from '../test/util/helpers';
+
+/**
+ * Objects used in each test.
+ *
+ * @property engine - The engine that holds the middleware stack, including the
+ * one being tested.
+ * @property provider - The provider that is used to make requests against
+ * (which the middleware being tested will react to).
+ * @property blockTracker - The block tracker which is used inside of the
+ * middleware being tested.
